@@ -1,0 +1,163 @@
+{% extends "base.html" %}
+{% block title %}PO Consolidator — Results{% endblock %}
+
+{% block head %}
+<style>
+  .results-container {
+    max-width: 1100px;
+    margin: 2.5rem auto;
+    padding: 0 1rem;
+  }
+  /* Stat grid */
+  .stat-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+    gap: 1.25rem;
+    margin-bottom: 2.5rem;
+  }
+  /* Table panels */
+  .table-panel {
+    background: #ffffff;
+    border: 1px solid #e0e0e0;
+    border-radius: 4px;
+    padding: 1.5rem;
+    margin-bottom: 2rem;
+  }
+  .table-panel .section-title {
+    margin-bottom: 1.25rem;
+  }
+  /* Tags */
+  .tag-po {
+    display: inline-block;
+    background: #edf5ff;
+    color: #0043ce;
+    border: 1px solid #0043ce;
+    border-radius: 12px;
+    padding: 1px 10px;
+    font-size: .75rem;
+    white-space: nowrap;
+  }
+  .tag-vendor {
+    display: inline-block;
+    background: #f6f2ff;
+    color: #6929c4;
+    border: 1px solid #6929c4;
+    border-radius: 12px;
+    padding: 1px 10px;
+    font-size: .75rem;
+    white-space: nowrap;
+  }
+  /* Action row */
+  .action-row {
+    display: flex;
+    gap: 1rem;
+    align-items: center;
+    margin-bottom: 2rem;
+    flex-wrap: wrap;
+  }
+  /* Currency format */
+  .currency { text-align: right; }
+  /* Responsive tables */
+  table { width: 100%; border-collapse: collapse; font-size: .875rem; }
+  th { background: #f4f4f4; font-weight: 600; text-align: left; padding: .5rem .75rem; border-bottom: 2px solid #e0e0e0; }
+  td { padding: .5rem .75rem; border-bottom: 1px solid #e0e0e0; vertical-align: middle; }
+  tr:hover td { background: #f9f9f9; }
+</style>
+{% endblock %}
+
+{% block content %}
+<!-- Hero -->
+<div class="po-hero">
+  <div style="max-width:1100px; margin:0 auto; display:flex; align-items:center; justify-content:space-between; flex-wrap:wrap; gap:1rem;">
+    <div>
+      <h1>Consolidation Results</h1>
+      <p>Review your aggregated purchase order data below.</p>
+    </div>
+    <a href="/" class="cds--btn cds--btn--secondary"
+       style="color:#fff; border-color:#fff;">← Upload More</a>
+  </div>
+</div>
+
+<div class="results-container">
+
+  <!-- Stat cards -->
+  <div class="stat-grid" id="stat-grid">
+    <!-- Populated by JS -->
+  </div>
+
+  <!-- Action row -->
+  <div class="action-row">
+    <button id="export-csv-btn" class="cds--btn cds--btn--primary" type="button">
+      ⬇ Export CSV
+    </button>
+    <span style="font-size:.875rem; color:#525252;" id="export-hint"></span>
+  </div>
+
+  <!-- Table 1: All Line Items -->
+  <div class="table-panel">
+    <p class="section-title">All Line Items</p>
+    <div class="cds--data-table-container">
+      <table class="cds--data-table" id="table-line-items">
+        <thead>
+          <tr>
+            <th>PO Number</th>
+            <th>Vendor</th>
+            <th>Date</th>
+            <th>Item Code</th>
+            <th>Description</th>
+            <th class="currency">Qty</th>
+            <th class="currency">Unit Price</th>
+            <th class="currency">Line Total</th>
+          </tr>
+        </thead>
+        <tbody id="tbody-line-items">
+          <tr><td colspan="8" style="text-align:center; color:#8d8d8d;">Loading…</td></tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+
+  <!-- Table 2: By Vendor -->
+  <div class="table-panel">
+    <p class="section-title">By Vendor</p>
+    <div class="cds--data-table-container">
+      <table class="cds--data-table" id="table-by-vendor">
+        <thead>
+          <tr>
+            <th>Vendor</th>
+            <th class="currency">Total POs</th>
+            <th class="currency">Total Spend</th>
+          </tr>
+        </thead>
+        <tbody id="tbody-by-vendor">
+          <tr><td colspan="3" style="text-align:center; color:#8d8d8d;">Loading…</td></tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+
+  <!-- Table 3: By Product -->
+  <div class="table-panel">
+    <p class="section-title">By Product</p>
+    <div class="cds--data-table-container">
+      <table class="cds--data-table" id="table-by-product">
+        <thead>
+          <tr>
+            <th>Item Code</th>
+            <th>Description</th>
+            <th class="currency">Total Qty</th>
+            <th class="currency">Total Cost</th>
+            <th>Vendors</th>
+          </tr>
+        </thead>
+        <tbody id="tbody-by-product">
+          <tr><td colspan="5" style="text-align:center; color:#8d8d8d;">Loading…</td></tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+
+</div>
+
+<script src="/static/js/upload.js"></script>
+{% endblock %}

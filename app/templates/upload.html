@@ -1,0 +1,150 @@
+{% extends "base.html" %}
+{% block title %}PO Consolidator — Upload{% endblock %}
+
+{% block head %}
+<style>
+  /* ---- Upload page specific ---- */
+  .feature-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+    gap: 1.25rem;
+    margin-top: 2rem;
+  }
+  .feature-card {
+    background: #ffffff;
+    border: 1px solid #e0e0e0;
+    border-radius: 4px;
+    padding: 1.5rem;
+  }
+  .feature-card h3 {
+    font-size: 1rem;
+    font-weight: 600;
+    color: #161616;
+    margin-bottom: .5rem;
+  }
+  .feature-card p {
+    font-size: .875rem;
+    color: #525252;
+    line-height: 1.5;
+  }
+  .feature-card .icon {
+    font-size: 1.5rem;
+    margin-bottom: .75rem;
+  }
+  /* Drop zone */
+  #drop-zone {
+    border: 2px dashed #8d8d8d;
+    border-radius: 4px;
+    background: #ffffff;
+    padding: 3rem 2rem;
+    text-align: center;
+    cursor: pointer;
+    transition: border-color .2s, background .2s;
+  }
+  #drop-zone.drag-over {
+    border-color: #0f62fe;
+    background: #edf5ff;
+  }
+  #drop-zone p {
+    margin: .5rem 0;
+    color: #525252;
+    font-size: .9rem;
+  }
+  #drop-zone strong {
+    color: #0f62fe;
+  }
+  #file-list {
+    margin-top: 1rem;
+    font-size: .875rem;
+    color: #393939;
+  }
+  #file-list li {
+    padding: .25rem 0;
+    list-style: disc;
+    margin-left: 1.5rem;
+  }
+  #process-btn {
+    margin-top: 1.5rem;
+  }
+  #error-banner {
+    display: none;
+    margin-top: 1rem;
+  }
+  .upload-container {
+    max-width: 860px;
+    margin: 2.5rem auto;
+    padding: 0 1rem;
+  }
+</style>
+{% endblock %}
+
+{% block content %}
+<!-- Hero -->
+<div class="po-hero">
+  <div style="max-width:860px; margin:0 auto;">
+    <h1>Purchase Order Consolidator</h1>
+    <p>Upload one or more PO PDFs and get instant consolidated inventory analytics — powered by IBM Docling watsonx SaaS.</p>
+  </div>
+</div>
+
+<div class="upload-container">
+
+  <!-- Feature cards -->
+  <div class="feature-grid">
+    <div class="feature-card">
+      <div class="icon">📄</div>
+      <h3>Multi-PO Processing</h3>
+      <p>Upload multiple purchase order PDFs in one go and process them all in parallel.</p>
+    </div>
+    <div class="feature-card">
+      <div class="icon">🏭</div>
+      <h3>Vendor Analytics</h3>
+      <p>Automatically aggregates spend and PO counts by supplier for at-a-glance comparisons.</p>
+    </div>
+    <div class="feature-card">
+      <div class="icon">📦</div>
+      <h3>Product Consolidation</h3>
+      <p>Merges identical SKUs across vendors so you see total quantities and costs per product.</p>
+    </div>
+    <div class="feature-card">
+      <div class="icon">📊</div>
+      <h3>CSV Export</h3>
+      <p>Download the full line-item dataset as a CSV for use in Excel or other tools.</p>
+    </div>
+  </div>
+
+  <!-- Upload section -->
+  <div style="margin-top:2.5rem;">
+    <p class="section-title">Upload Purchase Order PDFs</p>
+
+    <div id="drop-zone" role="button" tabindex="0" aria-label="Drop PDF files here or click to select">
+      <div style="font-size:2.5rem; margin-bottom:.5rem;">📂</div>
+      <p><strong>Drag &amp; drop</strong> PDF files here</p>
+      <p>or <strong>click to browse</strong></p>
+      <p style="color:#8d8d8d; font-size:.8rem; margin-top:.75rem;">PDF files only · up to 50 MB each</p>
+      <input type="file" id="file-input" accept=".pdf" multiple
+             style="display:none" aria-hidden="true" />
+    </div>
+
+    <ul id="file-list" aria-live="polite"></ul>
+
+    <!-- Error notification -->
+    <div id="error-banner" class="cds--inline-notification cds--inline-notification--error" role="alert">
+      <div class="cds--inline-notification__details">
+        <span class="cds--inline-notification__title">Error:&nbsp;</span>
+        <span class="cds--inline-notification__subtitle" id="error-msg"></span>
+      </div>
+    </div>
+
+    <button id="process-btn"
+            class="cds--btn cds--btn--primary"
+            disabled
+            type="button">
+      Process POs
+    </button>
+  </div>
+
+</div>
+
+<script src="/static/js/upload.js"></script>
+{% endblock %}
